@@ -1,0 +1,12 @@
+diff --git a/toolkit/actors/PictureInPictureChild.sys.mjs b/toolkit/actors/PictureInPictureChild.sys.mjs
+index ea47bd1029de4571a045c1ee17c313dc9d62cad8..0f8afca693e0fc112839cfb998fd8baa20227f06 100644
+--- a/toolkit/actors/PictureInPictureChild.sys.mjs
++++ b/toolkit/actors/PictureInPictureChild.sys.mjs
+@@ -295,6 +295,7 @@ export class PictureInPictureLauncherChild extends JSWindowActorChild {
+       if (
+         video &&
+         PictureInPictureChild.videoIsPlaying(video) &&
++        !video.muted &&
+         PictureInPictureChild.videoIsPiPEligible(video)
+       ) {
+         this.togglePictureInPicture({ video, reason: "AutoPip" }, false);

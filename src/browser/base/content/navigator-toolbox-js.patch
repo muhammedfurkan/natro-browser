@@ -1,0 +1,47 @@
+diff --git a/browser/base/content/navigator-toolbox.js b/browser/base/content/navigator-toolbox.js
+index 7b776b15d52367a008ce6bf53dcfcbbe007b7453..d9a3404905b73db7c8f202ab166d5f3c625351f6 100644
+--- a/browser/base/content/navigator-toolbox.js
++++ b/browser/base/content/navigator-toolbox.js
+@@ -6,7 +6,7 @@
+ document.addEventListener(
+   "DOMContentLoaded",
+   () => {
+-    const navigatorToolbox = document.getElementById("navigator-toolbox");
++    const navigatorToolbox = document.getElementById("browser");
+     const widgetOverflow = document.getElementById("widget-overflow");
+ 
+     function onPopupShowing(event) {
+@@ -185,6 +185,7 @@ document.addEventListener(
+         #reload-button ,
+         #urlbar-go-button,
+         #reader-mode-button,
++        #zen-tabs-wrapper,
+         #picture-in-picture-button,
+         #urlbar-zoom-button,
+         #star-button-box,
+@@ -206,6 +207,7 @@ document.addEventListener(
+         case "vertical-tabs-newtab-button":
+         case "tabs-newtab-button":
+         case "new-tab-button":
++        case "zen-tabs-wrapper":
+           gBrowser.handleNewTabMiddleClick(element, event);
+           break;
+ 
+@@ -315,7 +317,7 @@ document.addEventListener(
+         #pageActionButton,
+         #downloads-button,
+         #fxa-toolbar-menu-button,
+-        #unified-extensions-button,
++        #zen-site-data-icon-button,
+         #library-button
+       `);
+       if (!element) {
+@@ -394,7 +396,7 @@ document.addEventListener(
+           gSync.toggleAccountPanel(element, event);
+           break;
+ 
+-        case "unified-extensions-button":
++        case "zen-site-data-icon-button":
+           gUnifiedExtensions.togglePanel(event);
+           break;
+ 

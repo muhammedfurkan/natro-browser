@@ -1,0 +1,30 @@
+diff --git a/browser/components/BrowserGlue.sys.mjs b/browser/components/BrowserGlue.sys.mjs
+index f1cabb13ca4f86a2bafc1d93b7f882218a108eb2..2389b1addf24d17bd41fca65cfeb6f944479076d 100644
+--- a/browser/components/BrowserGlue.sys.mjs
++++ b/browser/components/BrowserGlue.sys.mjs
+@@ -8,6 +8,7 @@ import { XPCOMUtils } from "resource://gre/modules/XPCOMUtils.sys.mjs";
+ const lazy = {};
+ 
+ ChromeUtils.defineESModuleGetters(lazy, {
++  gZenUIMigration: "resource:///modules/ZenUIMigration.sys.mjs",
+   AboutHomeStartupCache: "resource:///modules/AboutHomeStartupCache.sys.mjs",
+   AWToolbarButton: "resource:///modules/aboutwelcome/AWToolbarUtils.sys.mjs",
+   ASRouter: "resource:///modules/asrouter/ASRouter.sys.mjs",
+@@ -1452,7 +1453,7 @@ BrowserGlue.prototype = {
+       windowcount++;
+       let tabbrowser = win.gBrowser;
+       if (tabbrowser) {
+-        pagecount += tabbrowser.visibleTabs.length - tabbrowser.pinnedTabCount;
++        pagecount += tabbrowser.visibleTabs.filter(t => t.getAttribute("pending")!=="true").length;
+       }
+     }
+ 
+@@ -1617,6 +1618,8 @@ BrowserGlue.prototype = {
+     } else if (profileDataVersion < APP_DATA_VERSION) {
+       lazy.ProfileDataUpgrader.upgrade(profileDataVersion, APP_DATA_VERSION);
+     }
++
++    lazy.gZenUIMigration.init(this._isNewProfile);
+   },
+ 
+   async _showUpgradeDialog() {

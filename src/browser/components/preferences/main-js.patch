@@ -1,0 +1,25 @@
+diff --git a/browser/components/preferences/main.js b/browser/components/preferences/main.js
+index 46283d3eacfea0f419afa3bdfd2a51e411502a20..4fe229706eb0145a21042b8b3cca323682e89e76 100644
+--- a/browser/components/preferences/main.js
++++ b/browser/components/preferences/main.js
+@@ -1117,6 +1117,11 @@ let SETTINGS_CONFIG = {
+         id: "browserRestoreSession",
+         l10nId: "startup-restore-windows-and-tabs",
+       },
++      {
++        id: "zenWorkspaceContinueWhereLeftOff",
++        l10nId: "zen-workspace-continue-where-left-off",
++        control: "moz-checkbox",
++      },
+       {
+         id: "windowsLaunchOnLogin",
+         l10nId: "windows-launch-on-login",
+@@ -1611,7 +1616,7 @@ function getBundleForLocales(newLocales) {
+     ])
+   );
+   return new Localization(
+-    ["browser/preferences/preferences.ftl", "branding/brand.ftl"],
++    ["browser/preferences/preferences.ftl", "branding/brand.ftl", "browser/preferences/zen-preferences.ftl"],
+     false,
+     undefined,
+     locales

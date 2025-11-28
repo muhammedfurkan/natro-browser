@@ -1,0 +1,57 @@
+{
+  "name": "Natro Browser",
+  "vendor": "Natro Team",
+  "appId": "natro",
+  "binaryName": "natro",
+  "version": {
+    "product": "firefox",
+    "version": "145.0.2",
+    "candidate": "145.0.2"
+  },
+  "buildOptions": {
+    "generateBranding": true
+  },
+  
+  "addons": {},
+  "brands": {
+    "release": {
+      "backgroundColor": "#09090b",
+      "brandShorterName": "Natro",
+      "brandShortName": "Natro",
+      "brandFullName": "Natro Browser",
+      "release": {
+        "displayVersion": "1.0.0",
+        "github": {
+          "repo": "natro-browser/desktop"
+        },
+        "archives": {
+          "windows": "windows.mar",
+          "macos-aarch64": "macos-aarch64.mar",
+          "linux": "linux.mar",
+          "macos-x64": "macos-x64.mar",
+          "windows-arm64": "windows-arm64.mar",
+          "linux-aarch64": "linux-aarch64.mar"
+        }
+      }
+    },
+    "twilight": {
+      "backgroundColor": "#09090b",
+      "brandShorterName": "Natro",
+      "brandShortName": "Twilight",
+      "brandFullName": "Natro Twilight",
+      "release": {
+        "displayVersion": "1.0.0t",
+        "github": {
+          "repo": "natro-browser/desktop"
+        }
+      }
+    }
+  },
+  "license": {
+    "ignoredFiles": [
+      ".*\\.json"
+    ],
+    "licenseType": "MPL-2.0"
+  },
+  "updateHostname": "updates.natro.io"
+}

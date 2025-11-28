@@ -1,0 +1,21 @@
+diff --git a/browser/themes/shared/tabbrowser/content-area.css b/browser/themes/shared/tabbrowser/content-area.css
+index db68a04d85c12a383ed33b459b9c8d942fe916f7..2941cf4010e24b31a3d9b2194fe9536f23063dbd 100644
+--- a/browser/themes/shared/tabbrowser/content-area.css
++++ b/browser/themes/shared/tabbrowser/content-area.css
+@@ -140,7 +140,6 @@
+   }
+ 
+   browser:is([blank], [pendingpaint]) {
+-    opacity: 0;
+   }
+ 
+   browser[type="content"] {
+@@ -323,7 +322,7 @@
+ 
+ .dialogStack {
+   z-index: var(--browser-stack-z-index-dialog-stack);
+-  position: absolute;
++  position: fixed;
+   inset: 0;
+ 
+   /* Hide tab-modal dialogs when a window-modal one is up. */
