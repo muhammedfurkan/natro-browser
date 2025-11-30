@@ -144,21 +144,22 @@ jobs:
           find . -maxdepth 1 -name "*.app" -type d
           cd ../..
 
-      - name: create .p12 for codesign 🖊️
-        run: |
-          cd engine
-          echo "${{ secrets.macOS_CERTIFICATES_P12_For_App_BASE64 }}" > cert.txt
-          base64 --decode -i cert.txt -o natroCert.p12
-          echo "${{ secrets.macOS_CERTIFICATES_P12_PASSWORD }}" > natropCertPassword.passwd
+      # TODO: Code signing devre dışı - Secret'lar eklenince aşağıdaki yorumları kaldırın
+      # - name: create .p12 for codesign 🖊️
+      #   run: |
+      #     cd engine
+      #     echo "${{ secrets.macOS_CERTIFICATES_P12_For_App_BASE64 }}" > cert.txt
+      #     base64 --decode -i cert.txt -o natroCert.p12
+      #     echo "${{ secrets.macOS_CERTIFICATES_P12_PASSWORD }}" > natropCertPassword.passwd
 
-      - name: Remove certificate sensitive information
-        run: |
-          rm engine/cert.txt || true
+      # - name: Remove certificate sensitive information
+      #   run: |
+      #     rm engine/cert.txt || true
 
-      - name: Import provisioning profile for .app
-        run: |
-          echo "${{ secrets.macOS_PROVISIONING_PROFILE }}" | base64 --decode > ./engine/Natro_Browser.provisionprofile
-          ls -la
+      # - name: Import provisioning profile for .app
+      #   run: |
+      #     echo "${{ secrets.macOS_PROVISIONING_PROFILE }}" | base64 --decode > ./engine/Natro_Browser.provisionprofile
+      #     ls -la
 
       - name: Unify architectures
         run: |
@@ -166,23 +167,23 @@ jobs:
           ./mach python "./toolkit/mozapps/installer/unify.py" "./obj-x86_64-apple-darwin/dist/${{ env.APP_NAME }}.app" "./obj-aarch64-apple-darwin/dist/${{ env.APP_NAME }}.app"
           echo "Merged aaarch64 into x86_64!"
 
-      - name: Import APPLE DEVELOPER ID CERTIFICATE for .app
-        uses: Apple-Actions/import-codesign-certs@v3
-        with:
-          p12-file-base64: ${{ secrets.macOS_CERTIFICATES_P12_For_App_BASE64 }}
-          p12-password: ${{ secrets.macOS_CERTIFICATES_P12_PASSWORD }}
+      # - name: Import APPLE DEVELOPER ID CERTIFICATE for .app
+      #   uses: Apple-Actions/import-codesign-certs@v3
+      #   with:
+      #     p12-file-base64: ${{ secrets.macOS_CERTIFICATES_P12_For_App_BASE64 }}
+      #     p12-password: ${{ secrets.macOS_CERTIFICATES_P12_PASSWORD }}
 
-      - name: Copy provisioning profile for .app (embedded in .app)
-        run: |
-          cd engine
-          echo "Copying provisioning profile for .app on both architectures (${{ env.APP_NAME }})"
-          cp ./Zen_Browser.provisionprofile "./embedded.provisionprofile"
+      # - name: Copy provisioning profile for .app (embedded in .app)
+      #   run: |
+      #     cd engine
+      #     echo "Copying provisioning profile for .app on both architectures (${{ env.APP_NAME }})"
+      #     cp ./Natro_Browser.provisionprofile "./embedded.provisionprofile"
 
-      - name: Sign .app
-        run: |
-          cd engine
-          # TODO: Change it to "production" once we figure out the issue with the webauth
-          ./mach macos-sign -v -r -c "release" -e "production" -a "./obj-x86_64-apple-darwin/dist/${{ env.APP_NAME }}.app" --rcodesign-p12-file natroCert.p12 --rcodesign-p12-password-file natropCertPassword.passwd
+      # - name: Sign .app
+      #   run: |
+      #     cd engine
+      #     # TODO: Change it to "production" once we figure out the issue with the webauth
+      #     ./mach macos-sign -v -r -c "release" -e "production" -a "./obj-x86_64-apple-darwin/dist/${{ env.APP_NAME }}.app" --rcodesign-p12-file natroCert.p12 --rcodesign-p12-password-file natropCertPassword.passwd
 
       - name: Create DMG
         run: |
@@ -194,22 +195,27 @@ jobs:
             --dsstore ./browser/branding/${{ inputs.release-branch }}/dsstore \
             ./obj-x86_64-apple-darwin/dist/ ../natro-macOS-universal-temp.dmg
 
-      - name: Remove sensitive information
-        run: |
-          rm -f ./engine/Natro_Browser.provisionprofile
+      # - name: Remove sensitive information
+      #   run: |
+      #     rm -f ./engine/Natro_Browser.provisionprofile
 
-      - name: Sign .dmg
+      # - name: Sign .dmg
+      #   run: |
+      #     set -ex
+      #     hdiutil convert natro-macOS-universal-temp.dmg -format UDZO -imagekey zlib-level=9 -o natro.macos-universal.dmg
+      #     codesign -s "${{ secrets.macOS_AppleDeveloperId }}" natro.macos-universal.dmg
+      #     xcrun notarytool submit "natro.macos-universal.dmg" \
+      #       --apple-id "${{ secrets.macOS_AppleAccountId }}" \
+      #       --team-id "${{ secrets.macOS_AppleDeveloperIdTeamId }}" \
+      #       --password "${{ secrets.macOS_AppleDeveloperIdPassword }}" \
+      #       --no-s3-acceleration \
+      #       --wait
+      #     xcrun stapler staple "natro.macos-universal.dmg"
+
+      - name: Create unsigned DMG
         run: |
           set -ex
           hdiutil convert natro-macOS-universal-temp.dmg -format UDZO -imagekey zlib-level=9 -o natro.macos-universal.dmg
-          codesign -s "${{ secrets.macOS_AppleDeveloperId }}" natro.macos-universal.dmg
-          xcrun notarytool submit "natro.macos-universal.dmg" \
-            --apple-id "${{ secrets.macOS_AppleAccountId }}" \
-            --team-id "${{ secrets.macOS_AppleDeveloperIdTeamId }}" \
-            --password "${{ secrets.macOS_AppleDeveloperIdPassword }}" \
-            --no-s3-acceleration \
-            --wait
-          xcrun stapler staple "natro.macos-universal.dmg"
 
       - name: Download host mar
         uses: actions/download-artifact@v4
